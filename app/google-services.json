@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "695948970470",
+    "firebase_url": "https://follo-fa9b4.firebaseio.com",
+    "project_id": "follo-fa9b4",
+    "storage_bucket": "follo-fa9b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695948970470:android:2bf1001e5c155b8b1cee27",
+        "android_client_info": {
+          "package_name": "com.example.follo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695948970470-me372ga00s6sckjjohetj1sdbal0osuc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.follo",
+            "certificate_hash": "db57a5f1974ddc3281415ab0e77f2fe13967fec1"
+          }
+        },
+        {
+          "client_id": "695948970470-o9d0bg81nrvhgqrhi5c7v93qsfkbtgeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZeynVMB36FZwbeDq1Yf_JBEp0mCMZfGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695948970470-o9d0bg81nrvhgqrhi5c7v93qsfkbtgeh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
