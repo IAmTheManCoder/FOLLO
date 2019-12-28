@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
     // THIS IS WHERE THE SUPPORTING METHODS START ##################################################
 
     //
+    //When the MainActivity starts check if the user has info stored to the database.
+    // If yes then stay on the mainActivity.  If No then send user back to SetUpActivity
+    // If user is null then send them to the login screen
     @Override
     protected void onStart() {
         super.onStart();
@@ -85,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Check the database to see is there is personal info stored in the database.  If there isn't
+    // then send them back to the SetUp screen.  In case the user sets up an account and then
+    // closes the app without filling out personal info.  Then when they return to the app it will
+    // send them back to the setup screen before it will allow them to use the app.
     private void CheckUserExistence(){
         final String current_User_Id = mAuth.getCurrentUser().getUid();
 
@@ -132,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // The menu that slides out from the left.  This handles the action when each of the items is pressed.
     private void UserMenuSelector(MenuItem item) {
         switch (item.getItemId()){
             case R.id.nav_profile:
