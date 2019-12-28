@@ -16,6 +16,11 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private FirebaseAuth mAuth;
+    private DatabaseReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance(); // get instance of the Firebase authentication called mAuth
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         // Display the toolbar
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
@@ -72,6 +79,36 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser == null){
             SendUserToLoginActivity(); // call method
         }
+        else{
+            CheckUserExistence();
+        }
+    }
+
+    private void CheckUserExistence(){
+        final String current_User_Id = mAuth.getCurrentUser().getUid();
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(current_User_Id)){ // does user have a user ID in the database?
+                    // there is no user ID in the database then send user to setup database info "name, country, gender, etc..."
+                    SendUserToSetupActivity();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    // Send the user to setup their personal info for database
+    private void SendUserToSetupActivity(){
+        Intent setupIntent = new Intent(MainActivity.this, SetupActivity.class);
+        setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(setupIntent);
+        finish();
     }
 
     // Sends user to the Login Screen
