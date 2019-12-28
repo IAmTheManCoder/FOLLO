@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference userRef;
+    String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
