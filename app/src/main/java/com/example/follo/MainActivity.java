@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView postList;
     private Toolbar mToolbar;
 
-    //private CircleImageView navProfileImage;
-    //private TextView navProfileUserName;
+    private CircleImageView navProfileImage;
+    private TextView navProfileUserName;
 
     private FirebaseAuth mAuth;
     private DatabaseReference userRef;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance(); // get instance of the Firebase authentication called mAuth
-        //currentUserId = mAuth.getCurrentUser().getUid();
+        currentUserId = mAuth.getCurrentUser().getUid();
         userRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         // Display the toolbar
@@ -62,19 +62,34 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
         //assigns the layout navigation header into a variable called NavView
         View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
-        //navProfileImage = (CircleImageView) findViewById(R.id.nav_profile_image);
-        //navProfileUserName = (TextView) navView.findViewById(R.id.nav_user_full_name);
+        navProfileImage = (CircleImageView) navView.findViewById(R.id.nav_profile_image);
+        navProfileUserName = (TextView) navView.findViewById(R.id.nav_user_full_name);
 
-        /*userRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+        userRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
                 if(dataSnapshot.exists()){
-                    String fullname = dataSnapshot.child("fullname").getValue().toString();
-                    String image = dataSnapshot.child("profileimage").getValue().toString();
-                    navProfileUserName.setText(fullname);
-                    Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfileImage);
+
+                    if(dataSnapshot.hasChild("fullname")){
+                        String fullname = dataSnapshot.child("fullname").getValue().toString();
+                        navProfileUserName.setText(fullname);
+                    }
+                    if (dataSnapshot.hasChild("profileimage")) {
+                        String image = dataSnapshot.child("profileimage").getValue().toString();
+                        Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfileImage);
+
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, "Profile name does not exist", Toast.LENGTH_SHORT).show();
+                    }
+
+
+
                 }
             }
 
@@ -83,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-*/
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
