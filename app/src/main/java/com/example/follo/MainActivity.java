@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CircleImageView navProfileImage;
     private TextView navProfileUserName;
+    private ImageButton addNewPostButton;
 
     private FirebaseAuth mAuth;
     private DatabaseReference userRef;
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Home");
+
+        addNewPostButton = (ImageButton)findViewById(R.id.add_new_post_button);
 
         // Setting up the home screen and the drawer that slides out from the left
         drawerLayout = (DrawerLayout) findViewById(R.id.drawable_layout);
@@ -106,8 +110,19 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        addNewPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendUserToPostActivity();
+            }
+        });
     }
 
+    private void SendUserToPostActivity() {
+        Intent addNewPostIntent = new Intent(MainActivity.this, PostActivity.class);
+        startActivity(addNewPostIntent);
+    }
 
 
     // THIS IS WHERE THE SUPPORTING METHODS START ##################################################
@@ -183,6 +198,10 @@ public class MainActivity extends AppCompatActivity {
     // The menu that slides out from the left.  This handles the action when each of the items is pressed.
     private void UserMenuSelector(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.nav_post:
+                SendUserToPostActivity();
+                Toast.makeText(this,"Add New Post", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.nav_profile:
                 Toast.makeText(this,"Profile", Toast.LENGTH_SHORT).show();
                 break;
