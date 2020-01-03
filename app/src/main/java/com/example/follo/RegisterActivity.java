@@ -109,8 +109,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 loadingBar.dismiss();
                             }
                             else{
+                                SendUserToLoginActivity();
                                 String message = task.getException().getMessage();
-                                Toast.makeText(RegisterActivity.this, "ERROR Occurred:" + message, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "ERROR Occurred:" + message + " Please Try Again...", Toast.LENGTH_LONG).show();
                                 loadingBar.dismiss();
                             }
                         }
@@ -127,5 +128,13 @@ public class RegisterActivity extends AppCompatActivity {
         setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(setupIntent); // activate intention
         finish(); // user is not allowed the register activity by pressing back button
+    }
+
+    // Send the user to the Register account screen
+    private void SendUserToLoginActivity() {
+        Intent registerIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(registerIntent);
+
+
     }
 }
