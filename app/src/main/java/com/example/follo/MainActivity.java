@@ -2,6 +2,7 @@ package com.example.follo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     // Display the users posts.
     private void DisplayAllUsersPosts(){
 
-        Query sortPostsInDecendingOrder = postsfef.orderByChild("counter");
+        Query sortPostsInDecendingOrder = postsfef.orderByChild("timestamp");
 
         FirebaseRecyclerOptions<Posts> options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(sortPostsInDecendingOrder, Posts.class).build();
         FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<Posts,PostsViewHolder>(options) {
@@ -330,10 +332,23 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Settings", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_logout:
-                mAuth.signOut();
-                Toast.makeText(this,"Bye", Toast.LENGTH_SHORT).show();
-                SendUserToLoginActivity();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Are You Sure You Want To Logout?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mAuth.signOut();
+                                Toast.makeText(MainActivity.this,"Bye", Toast.LENGTH_SHORT).show();
+                                SendUserToLoginActivity();
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", null);
+                AlertDialog alert = builder.create();
+                alert.show();
                 break;
+
         }
     }
 

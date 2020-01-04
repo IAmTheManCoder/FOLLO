@@ -32,6 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.net.URI;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ public class PostActivity extends AppCompatActivity {
     private StorageReference postsImageReference;
     private DatabaseReference usersRef, postRef;
     private FirebaseAuth mAuth;
+
 
 
     @Override
@@ -170,6 +172,7 @@ public class PostActivity extends AppCompatActivity {
                     String userFullName = dataSnapshot.child("fullname").getValue().toString();
                     String userProfileImage = dataSnapshot.child("profileimage").getValue().toString();
 
+
                     HashMap postsMap = new HashMap();
                         postsMap.put("uid", current_user_id);
                         postsMap.put("date", saveCurrentDate);
@@ -179,6 +182,7 @@ public class PostActivity extends AppCompatActivity {
                         postsMap.put("profileimage", userProfileImage);
                         postsMap.put("fullname", userFullName);
                         postsMap.put("counter", countPosts);
+                        postsMap.put("timestamp", getCurrentTimeStamp());
                     postRef.child(current_user_id + postRandomName).updateChildren(postsMap)
                             .addOnCompleteListener(new OnCompleteListener() {
                                 @Override
@@ -202,6 +206,11 @@ public class PostActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private long getCurrentTimeStamp() {
+        Long timestamp = System.currentTimeMillis()/1000;
+        return timestamp;
     }
 
     private void OpenGallery(){
