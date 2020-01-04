@@ -16,7 +16,7 @@
         android:layout_marginTop="10dp"
         android:background="#80000000"
         android:cropToPadding="false"
-        app:srcCompat="@drawable/logory" />
+        app:srcCompat="@drawable/follory" />
 
     <EditText
         android:id="@+id/login_email"
@@ -26,7 +26,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="false"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="-1dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginTop="143dp"
         android:autofillHints=""
         android:background="@drawable/inputs"
@@ -43,10 +44,11 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="0dp"
+        android:layout_below="@+id/login_email"
+        android:layout_centerInParent="false"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="221dp"
-        android:layout_marginEnd="1dp"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/inputs"
         android:drawableLeft="@drawable/password"
         android:ems="10"
@@ -57,17 +59,18 @@
     <Button
         android:id="@+id/login_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="-2dp"
-        android:layout_marginBottom="370dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_below="@+id/login_password"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button"
         android:padding="15dp"
         android:text="Login"
         android:textColor="@android:color/white"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
@@ -77,7 +80,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="291dp"
+        android:layout_marginBottom="246dp"
         android:text="Don't Have An Account, Need New Account?"
         android:textAlignment="center"
         android:textColor="@android:color/white"
@@ -90,7 +93,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="247dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="193dp"
         android:text="or Login with"
         android:textAlignment="center"
         android:textColor="@android:color/white"
@@ -112,9 +116,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="29dp"
+        android:layout_marginStart="27dp"
         android:layout_marginLeft="25dp"
-        android:layout_marginBottom="151dp"
+        android:layout_marginBottom="91dp"
         android:src="@drawable/facebook" />
 
     <ImageView
@@ -124,9 +128,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="142dp"
+        android:layout_marginStart="141dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginBottom="140dp"
+        android:layout_marginBottom="79dp"
         android:src="@drawable/twitter" />
 
     <ImageView
@@ -137,7 +141,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="25dp"
-        android:layout_marginBottom="154dp"
+        android:layout_marginBottom="92dp"
         android:src="@drawable/google" />
 
 </RelativeLayout>

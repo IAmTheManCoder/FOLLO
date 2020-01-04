@@ -30,11 +30,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Initiate some variables
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton addNewPostButton;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference userRef, query;
+    private DatabaseReference userRef, postsfef;
 
 
     String currentUserId;
@@ -57,26 +59,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // assign Firebase references to variable names
+
         mAuth = FirebaseAuth.getInstance(); // get instance of the Firebase authentication called mAuth
         currentUserId = mAuth.getCurrentUser().getUid();
-        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        query = FirebaseDatabase.getInstance().getReference().child("Posts");
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users"); // create Users category in database
+        postsfef = FirebaseDatabase.getInstance().getReference().child("Posts"); // Create Posts category in database
 
         // Display the toolbar
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Home");
 
+        // assign the post button a variable name
         addNewPostButton = (ImageButton)findViewById(R.id.add_new_post_button);
 
         // Setting up the home screen and the drawer that slides out from the left
         drawerLayout = (DrawerLayout) findViewById(R.id.drawable_layout);
+        // Drawer toggle is the hamburger on the toolbar
         actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawer_open, R.string.drawer_closed);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
+        // assign the postList
         postList = (RecyclerView) findViewById(R.id.all_users_post_list);
         postList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -89,17 +96,18 @@ public class MainActivity extends AppCompatActivity {
         navProfileImage = (CircleImageView) navView.findViewById(R.id.nav_profile_image);
         navProfileUserName = (TextView) navView.findViewById(R.id.nav_user_full_name);
 
+        // If an image is stored to the database upon setup then store the name and pic to the drawerToggle
         userRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
+            // This is the navigation header drawer that slides out from the left
                 if(dataSnapshot.exists()){
-
+                    // put the username on the drawer
                     if(dataSnapshot.hasChild("fullname")){
                         String fullname = dataSnapshot.child("fullname").getValue().toString();
                         navProfileUserName.setText(fullname);
-                    }
+                    }   // put the profile image on the navigation header navProfileImage CircleView
                     if (dataSnapshot.hasChild("profileimage")) {
                         String image = dataSnapshot.child("profileimage").getValue().toString();
                         Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfileImage);
@@ -109,17 +117,15 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Profile name does not exist", Toast.LENGTH_SHORT).show();
                     }
 
-
-
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
 
+        // If the navigation header is pressed then close it
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -128,17 +134,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // if the
         addNewPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SendUserToPostActivity();
             }
         });
+        // This is the very last command in the OnCreate section.  Everytime the user ends up on the
+        // Home screen automatically update the posts.
         DisplayAllUsersPosts();
     }
 
+    // THis is where the supporting methods section Starts #########################################################################
+
+
+    // Display the users posts.
     private void DisplayAllUsersPosts(){
-        FirebaseRecyclerOptions<Posts> options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(query, Posts.class).build();
+
+        Query sortPostsInDecendingOrder = postsfef.orderByChild("counter");
+
+        FirebaseRecyclerOptions<Posts> options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(sortPostsInDecendingOrder, Posts.class).build();
         FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<Posts,PostsViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull PostsViewHolder postsViewHolder, int position, @NonNull Posts posts) {

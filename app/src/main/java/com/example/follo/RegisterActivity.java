@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
     }
-
+    // onStart triggers when the activity starts up.  If the user exits(has an account) then send to main activity
     @Override
     protected void onStart() {
         super.onStart();
@@ -62,6 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    // Sens user to the main Activity which is the home screen
     private void SendUserToMainActivity(){
         Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -93,6 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         // if instance comes back from Firebase with correct authentication than show Success message
         else{
+            // launch the loading bar
             loadingBar.setTitle("Creating New Account");
             loadingBar.setMessage("Please Wait While We Are Creating Your Account...");
             loadingBar.show();
@@ -108,10 +110,14 @@ public class RegisterActivity extends AppCompatActivity {
                                 Toast.makeText(RegisterActivity.this, "Authentication Success...", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
+                            // if it's not successful then display message and ask them to try again.
                             else{
+                                // app was crashing if there was already an account and the user tried to use an existing account
+                                // so to solve that I send the user back to the Login Activity where they can either log in or
+                                // select register an account again
                                 SendUserToLoginActivity();
                                 String message = task.getException().getMessage();
-                                Toast.makeText(RegisterActivity.this, "ERROR Occurred:" + message + " Please Try Again...", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, "ERROR Occurred:" + message + ".  Login Dude...", Toast.LENGTH_LONG).show();
                                 loadingBar.dismiss();
                             }
                         }

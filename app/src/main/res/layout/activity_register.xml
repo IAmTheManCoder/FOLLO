@@ -16,7 +16,7 @@
         android:layout_marginTop="10dp"
         android:background="#80000000"
         android:cropToPadding="false"
-        app:srcCompat="@drawable/logory" />
+        app:srcCompat="@drawable/follory" />
 
     <EditText
         android:id="@+id/register_email"

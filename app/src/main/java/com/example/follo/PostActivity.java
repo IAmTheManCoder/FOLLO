@@ -49,6 +49,7 @@ public class PostActivity extends AppCompatActivity {
     private Uri imageUri;
     private String description;
     private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
+    private long countPosts = 0;
 
     private StorageReference postsImageReference;
     private DatabaseReference usersRef, postRef;
@@ -119,28 +120,13 @@ public class PostActivity extends AppCompatActivity {
         saveCurrentDate = currentDate.format(calForDate.getTime());
 
         Calendar calForTime = Calendar.getInstance();
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm:ss");
         saveCurrentTime = currentTime.format(calForDate.getTime());
 
         postRandomName = saveCurrentDate + saveCurrentTime;
 
         final StorageReference filePath = postsImageReference.child("Post Images").child(imageUri.getLastPathSegment() + postRandomName + ".jpg");
 
-        /*filePath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-
-                if(task.isSuccessful()){
-                    downloadUrl = task.getResult().getDownloadUrl().toString();
-                    Toast.makeText(PostActivity.this, "Post Image Uploaded...", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    String message = task.getException().getMessage();
-                    Toast.makeText(PostActivity.this, "ERROR Occurred: " + message, Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });*/
 
         filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -160,6 +146,23 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void SavingPostInformationToDatabase(){
+        postRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    countPosts = dataSnapshot.getChildrenCount();
+                }
+                else{
+                    countPosts = 0;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         usersRef.child(current_user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -175,6 +178,7 @@ public class PostActivity extends AppCompatActivity {
                         postsMap.put("postimage", downloadUrl);
                         postsMap.put("profileimage", userProfileImage);
                         postsMap.put("fullname", userFullName);
+                        postsMap.put("counter", countPosts);
                     postRef.child(current_user_id + postRandomName).updateChildren(postsMap)
                             .addOnCompleteListener(new OnCompleteListener() {
                                 @Override

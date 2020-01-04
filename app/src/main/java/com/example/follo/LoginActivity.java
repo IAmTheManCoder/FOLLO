@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        // Start the app.  This screen is called upon start up.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                 SendUserToRegisterActivity();
             }
         });
-
+        // if the select the login button than call the Allowing User To Login method
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // This onStart method triggers when the app starts up.  If the current user logging in
+    // has an account an is currently authenticated then send them right to the Main Activity
     @Override
     protected void onStart() {
         super.onStart();
@@ -71,16 +73,19 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // When the user inputs their login id and password and then presses the Log in button
+    // gather the input in the text screen and attempt to authenticate with Firebase.
     private void AllowingUserToLogin(){
         String email = userEmail.getText().toString();
         String password = userPassword.getText().toString();
 
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(email)) { // if empty give warning
             Toast.makeText(this, "Please Write Your Email...", Toast.LENGTH_SHORT).show();
         }
-        else if(TextUtils.isEmpty(password)){
+        else if(TextUtils.isEmpty(password)){ // if empty give warning
             Toast.makeText(this, "Please Write Your Password...", Toast.LENGTH_SHORT).show();
         }
+        // start the login bar
         else {
             loadingBar.setTitle("Login");
             loadingBar.setMessage("Please Wait While We Log You In...");
@@ -91,12 +96,12 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if(task.isSuccessful()){ // if user authenticates then send them to Main Activity
                                 SendUserToMainActivity();
                                 Toast.makeText(LoginActivity.this, "You Have Logged In Successfully...", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
-                            else{
+                            else{ // if user does not authenticate display warning message from Firebase
                                 String message = task.getException().getMessage();
                                 Toast.makeText(LoginActivity.this, "ERROR Occurred " + message, Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
@@ -107,11 +112,12 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Send user to Main Activity
     private void SendUserToMainActivity(){
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
-        finish();
+        finish(); // Once on the Main Activity if the back button is pressed then app will close
 
     }
 
