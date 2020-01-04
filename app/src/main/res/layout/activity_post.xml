@@ -32,13 +32,13 @@
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="217dp"
-
         android:background="@drawable/inputs"
         android:ems="10"
         android:gravity="start|top"
         android:hint="Write Something About Your Image Here"
-        android:inputType="textMultiLine"
-        android:padding="15dp" />
+        android:inputType="textMultiLine|textCapSentences"
+        android:padding="15dp"
+        />
 
     <Button
         android:id="@+id/update_post_button"

@@ -89,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
+        // Logging in with Google
         mGoogleSignInClient = new GoogleApiClient.Builder(this)
         .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
             @Override
@@ -105,11 +106,13 @@ public class LoginActivity extends AppCompatActivity {
            });
     }
 
+    // Logging in with Google
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleSignInClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    // Logging in with Google
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -135,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Logging in with Google
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
