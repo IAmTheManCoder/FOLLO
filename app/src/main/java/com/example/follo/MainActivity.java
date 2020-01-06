@@ -329,13 +329,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Messages", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_settings:
+                SendUserToSettingsActivity();
                 Toast.makeText(this,"Settings", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_logout:
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setMessage("Are You Sure You Want To Logout?")
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mAuth.signOut();
@@ -353,4 +354,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // Sends user to the Login Screen
+    private void SendUserToSettingsActivity() {
+        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+        startActivity(settingsIntent);
+
+
+    }
 }
