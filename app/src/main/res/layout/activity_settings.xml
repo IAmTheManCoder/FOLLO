@@ -40,7 +40,7 @@
                 android:layout_marginRight="40dp"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/inputs"
-                android:hint="say something about yourself"
+                android:hint="Something About You"
                 android:padding="30dp"
                 android:textColor="@android:color/background_dark"
                 android:textSize="20sp"
