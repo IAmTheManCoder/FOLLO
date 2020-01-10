@@ -49,7 +49,7 @@ public class PostActivity extends AppCompatActivity {
     private static final int Gallery_Pick = 1;
     private Uri imageUri;
     private String description;
-    private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
+    private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id, specialKey;
     private long countPosts = 0;
 
     private StorageReference postsImageReference;
@@ -66,7 +66,7 @@ public class PostActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         current_user_id = mAuth.getCurrentUser().getUid();
 
-        postsImageReference = FirebaseStorage.getInstance().getReference();
+        postsImageReference = FirebaseStorage.getInstance().getReference().child("Post Images");
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         postRef = FirebaseDatabase.getInstance().getReference().child("Posts");
 
@@ -127,8 +127,7 @@ public class PostActivity extends AppCompatActivity {
 
         postRandomName = saveCurrentDate + saveCurrentTime;
 
-        final StorageReference filePath = postsImageReference.child("Post Images").child(imageUri.getLastPathSegment() + postRandomName + ".jpg");
-
+        final StorageReference filePath = postsImageReference.child(imageUri.getLastPathSegment() + ".jpg");
 
         filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -148,22 +147,6 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void SavingPostInformationToDatabase(){
-        postRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    countPosts = dataSnapshot.getChildrenCount();
-                }
-                else{
-                    countPosts = 0;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         usersRef.child(current_user_id).addValueEventListener(new ValueEventListener() {
             @Override
@@ -172,16 +155,14 @@ public class PostActivity extends AppCompatActivity {
                     String userFullName = dataSnapshot.child("fullname").getValue().toString();
                     String userProfileImage = dataSnapshot.child("profileimage").getValue().toString();
 
-
                     HashMap postsMap = new HashMap();
                         postsMap.put("uid", current_user_id);
                         postsMap.put("date", saveCurrentDate);
                         postsMap.put("time", saveCurrentTime);
                         postsMap.put("description", description);
                         postsMap.put("postimage", downloadUrl);
-                        postsMap.put("profileimage", userProfileImage);
-                        postsMap.put("fullname", userFullName);
-                        postsMap.put("counter", countPosts);
+                        postsMap.put("postprofileimage", userProfileImage);
+                        postsMap.put("postfullname", userFullName);
                         postsMap.put("timestamp", getCurrentTimeStamp());
                     postRef.child(current_user_id + postRandomName).updateChildren(postsMap)
                             .addOnCompleteListener(new OnCompleteListener() {
@@ -189,7 +170,7 @@ public class PostActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task task) {
                                     if(task.isSuccessful()){
                                         SendUserToMainActivity();
-                                        Toast.makeText(PostActivity.this, "New Post Updated Successfully.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PostActivity.this, "Success Is Sweet!!!!", Toast.LENGTH_SHORT).show();
                                         loadingBar.dismiss();
                                     }
                                     else{
@@ -245,6 +226,7 @@ public class PostActivity extends AppCompatActivity {
 
     private void SendUserToMainActivity() {
         Intent mainIntent = new Intent(PostActivity.this, MainActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
     }
 }

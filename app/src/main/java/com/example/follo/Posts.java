@@ -1,12 +1,12 @@
 package com.example.follo;
 
 public class Posts {
-    public String fullname;
+    public String postfullname;
     public String uid;
     public String time;
     public String date;
     public String postimage;
-    public String profileimage;
+    public String postprofileimage;
     public String description;
 
     public Posts(){
@@ -18,9 +18,9 @@ public class Posts {
         this.time = time;
         this.date = date;
         this.postimage = postimage;
-        this.profileimage = profileimage;
+        this.postprofileimage = profileimage;
         this.description = description;
-        this.fullname = fullname;
+        this.postfullname = fullname;
     }
 
     public void setUid(String uid) {
@@ -40,7 +40,7 @@ public class Posts {
     }
 
     public void setProfileimage(String profileimage) {
-        this.profileimage = profileimage;
+        this.postprofileimage = profileimage;
     }
 
     public void setDescription(String description) {
@@ -48,7 +48,7 @@ public class Posts {
     }
 
     public void setFullname(String fullname) {
-        this.fullname = fullname;
+        this.postfullname = fullname;
     }
 
     public String getUid() {
@@ -68,7 +68,7 @@ public class Posts {
     }
 
     public String getProfileimage() {
-        return profileimage;
+        return postprofileimage;
     }
 
     public String getDescription() {
@@ -76,7 +76,7 @@ public class Posts {
     }
 
     public String getFullname() {
-        return fullname;
+        return postfullname;
     }
 
 

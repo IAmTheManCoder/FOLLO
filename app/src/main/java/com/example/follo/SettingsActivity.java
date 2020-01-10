@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -42,9 +45,11 @@ public class SettingsActivity extends AppCompatActivity {
     private Button updateAccountSettingsButton;
     private CircleImageView userProfImage;
     private ProgressDialog loadingBar;
-    private DatabaseReference settingsUserRef;
+    private DatabaseReference userRef, postRef;
     private FirebaseAuth mAuth;
     private StorageReference UserProfileImageRef;
+    private String downloadUrl, uid;
+    private static final String TAG = SettingsActivity.class.getSimpleName();
 
 
     private String currentUserId;
@@ -58,8 +63,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid();
-        settingsUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId);
+        uid = mAuth.getCurrentUser().getUid();
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId);
         UserProfileImageRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
+        postRef = FirebaseDatabase.getInstance().getReference().child("Posts");
 
         loadingBar = new ProgressDialog(this);
         mToolbar = (Toolbar) findViewById(R.id.settings_toolbar);
@@ -78,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
         userProfImage = (CircleImageView) findViewById(R.id.settings_profile_image);
         updateAccountSettingsButton = (Button) findViewById(R.id.update_account_settings_button);
 
-        settingsUserRef.addValueEventListener(new ValueEventListener() {
+        userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
@@ -127,9 +134,9 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
+    // In settings start this when a new pic is selected to replace the existing profile pic
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -157,7 +164,6 @@ public class SettingsActivity extends AppCompatActivity {
                 loadingBar.setCanceledOnTouchOutside(true);
                 loadingBar.show();
 
-
                 // Get the result of the image and store it in resultUri
                 Uri resultUri = result.getUri();
                 // Get a reference to the storage in Firebase.  Its a filepath to the Firebase Storage
@@ -170,13 +176,12 @@ public class SettingsActivity extends AppCompatActivity {
                         filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                final String downloadUrl = uri.toString();
-                                settingsUserRef.child("profileimage").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                downloadUrl = uri.toString();
+                                userRef.child("profileimage").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
-                                            //Intent selfIntent = new Intent(SetupActivity.this, SetupActivity.class);
-                                            //startActivity(selfIntent);
+                                            UpdatePostProfileImages();// Update all posts with new image
                                             Toast.makeText(SettingsActivity.this, "Image Stored", Toast.LENGTH_SHORT).show();
                                             loadingBar.dismiss();
                                         }
@@ -203,7 +208,28 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    // Update "Posts" with the new URL image
+    private void UpdatePostProfileImages() {
+        // query the user's uid in post to filter out only the current user's posts
+        Query query = postRef.orderByChild("uid").equalTo(uid);
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // iterate through each post and update the URL on each post
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    ds.child("postprofileimage").getRef().setValue(downloadUrl);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, databaseError.getMessage());
+            }
+        };
+        query.addListenerForSingleValueEvent(valueEventListener);
+    }
+
+    // Validate the user input from the TextViews. If all are full then update the user info
     private void ValidateAccountInfo() {
 
         String username = userName.getText().toString();
@@ -237,15 +263,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
         else
         {
-            loadingBar.setTitle("Profile Image");
-            loadingBar.setMessage("Please wait, while we updating your profile image...");
-            loadingBar.setCanceledOnTouchOutside(true);
-            loadingBar.show();
             updateAccountInfo(username, profilename, status, dob, country, gender, relation);
         }
 
     }
 
+    // Update the user info
     private void updateAccountInfo(String username, String profilename, String status, String dob, String country, String gender, String relation) {
         HashMap userMap = new HashMap();
             userMap.put("username", username);
@@ -255,7 +278,7 @@ public class SettingsActivity extends AppCompatActivity {
             userMap.put("country", country);
             userMap.put("gender", gender);
             userMap.put("relationshipstatus", relation);
-            settingsUserRef.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+            userRef.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task) {
                     if(task.isSuccessful()){
@@ -271,9 +294,20 @@ public class SettingsActivity extends AppCompatActivity {
             });
     }
 
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == android.R.id.home){
+            SendUserToMainActivity();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void SendUserToMainActivity(){
-        Intent mainInent = new Intent(SettingsActivity.this, MainActivity.class);
-        startActivity(mainInent);
+        Intent mainIntent = new Intent(SettingsActivity.this, MainActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(mainIntent);
+        finish();
 
     }
 

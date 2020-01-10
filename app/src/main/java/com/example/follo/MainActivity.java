@@ -95,7 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
         //assigns the layout navigation header into a variable called NavView
         View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
+        // image view for profile pic on the slide out menu
         navProfileImage = (CircleImageView) navView.findViewById(R.id.nav_profile_image);
+        // user name underneath the circle image view
         navProfileUserName = (TextView) navView.findViewById(R.id.nav_user_full_name);
 
         // If an image is stored to the database upon setup then store the name and pic to the drawerToggle
@@ -197,9 +199,9 @@ public class MainActivity extends AppCompatActivity {
             mView = itemView;
         }
 
-        public void setFullname(String fullname) {
+        public void setFullname(String postfullname) {
             TextView username = (TextView) mView.findViewById(R.id.post_user_name);
-            username.setText(fullname);
+            username.setText(postfullname);
         }
 
         public void setDescription(String description) {
@@ -207,9 +209,9 @@ public class MainActivity extends AppCompatActivity {
             postDescription.setText(description);
         }
 
-        public void setProfileImage(Context applicationContext, String profileimage) {
+        public void setProfileImage(Context applicationContext, String postprofileimage) {
             CircleImageView image = (CircleImageView) mView.findViewById(R.id.post_profile_image);
-            Picasso.get().load(profileimage).into(image);
+            Picasso.get().load(postprofileimage).into(image);
         }
 
         public void setPostImage(Context applicationContext, String postimage) {
@@ -357,6 +359,7 @@ public class MainActivity extends AppCompatActivity {
     // Sends user to the Login Screen
     private void SendUserToSettingsActivity() {
         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(settingsIntent);
 
 
