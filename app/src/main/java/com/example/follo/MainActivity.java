@@ -316,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Add New Post", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_profile:
+                SendUserToProfileActivity();
                 Toast.makeText(this,"Profile", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_home:
@@ -359,9 +360,12 @@ public class MainActivity extends AppCompatActivity {
     // Sends user to the Login Screen
     private void SendUserToSettingsActivity() {
         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(settingsIntent);
+    }
 
-
+    // Sends user to the Login Screen
+    private void SendUserToProfileActivity() {
+        Intent settingsIntent = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(settingsIntent);
     }
 }
