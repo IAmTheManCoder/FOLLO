@@ -301,6 +301,7 @@ public class SettingsActivity extends AppCompatActivity {
             SendUserToMainActivity();
         }
         return super.onOptionsItemSelected(item);
+
     }
 
     private void SendUserToMainActivity(){

@@ -44,7 +44,7 @@
         android:drawableLeft="@drawable/name"
         android:ems="10"
         android:hint="Full Name"
-        android:inputType="textMultiLine|textCapSentences"
+        android:inputType="textMultiLine|textCapWords"
         android:padding="14dp" />
 
     <EditText

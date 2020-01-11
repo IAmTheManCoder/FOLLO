@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 SendUserToPostActivity();
             }
         });
-        // This is the very last command in the OnCreate section.  Everytime the user ends up on the
+        // This is the very last command in the OnCreate section.  Every time the user ends up on the
         // Home screen automatically update the posts.
         DisplayAllUsersPosts();
     }
@@ -323,9 +323,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Home", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_friends:
+
                 Toast.makeText(this,"Friends", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_find_friends:
+                SendUserToFindFriendsActivity();
                 Toast.makeText(this,"Find Friends", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_messages:
@@ -357,15 +359,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // Sends user to the Login Screen
+    // Sends user to the Settings Screen
     private void SendUserToSettingsActivity() {
         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(settingsIntent);
     }
 
-    // Sends user to the Login Screen
+    // Sends user to the Profile Screen
     private void SendUserToProfileActivity() {
         Intent settingsIntent = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(settingsIntent);
+    }
+
+    // Sends user to the find friends Screen
+    private void SendUserToFindFriendsActivity() {
+        Intent settingsIntent = new Intent(MainActivity.this, FindFriendActivity.class);
         startActivity(settingsIntent);
     }
 }
