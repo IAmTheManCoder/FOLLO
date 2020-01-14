@@ -36,6 +36,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Comment;
+
 public class MainActivity extends AppCompatActivity {
 
     // Initiate some variables
@@ -180,6 +182,16 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(clickPostIntent);
                     }
                 });
+
+                postsViewHolder.commentPostButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
+                        commentsIntent.putExtra("postKey", postKey);
+                        startActivity(commentsIntent);
+                    }
+                });
+
                 postsViewHolder.likePostButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
