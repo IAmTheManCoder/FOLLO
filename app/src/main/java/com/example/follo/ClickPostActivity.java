@@ -110,7 +110,7 @@ public class ClickPostActivity extends AppCompatActivity {
         postImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent fullScreenIntent = new Intent(ClickPostActivity.this, FullScreenActivity.class);
+                Intent fullScreenIntent = new Intent(ClickPostActivity.this, FullScreenZoom.class);
                 fullScreenIntent.setData(Uri.parse(image));
                 startActivity(fullScreenIntent);
 

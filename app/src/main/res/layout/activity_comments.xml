@@ -22,12 +22,14 @@
         android:textColor="@android:color/black" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comments_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/textView"
-        android:layout_margin="5dp"
-        android:id="@+id/comments_list" />
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp" />
 
     <EditText
         android:id="@+id/comment_input"

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.opengl.Matrix;
 import android.os.Bundle;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,6 +17,7 @@ import com.squareup.picasso.Picasso;
 public class FullScreenActivity extends AppCompatActivity {
 
     private Uri imageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +30,7 @@ public class FullScreenActivity extends AppCompatActivity {
             imageUri = callingActivityIntent.getData();
             if (imageUri != null && fullScreenImageView != null) {
                 Picasso.get().load(imageUri).into(fullScreenImageView);
+
             }
         }
         fullScreenImageView.setOnClickListener(new View.OnClickListener() {
