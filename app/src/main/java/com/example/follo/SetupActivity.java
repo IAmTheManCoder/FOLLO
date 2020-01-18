@@ -7,6 +7,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -50,6 +51,7 @@ public class SetupActivity extends AppCompatActivity {
 
     String currentUserID;
     final static int Gallery_Pick = 1;
+    boolean picNotChanged = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -107,6 +109,7 @@ public class SetupActivity extends AppCompatActivity {
                         String image = dataSnapshot.child("profileimage").getValue().toString();
                         Picasso.get().load(image).placeholder(R.drawable.profile).into(ProfileImage);
                         clickHere.setVisibility(View.INVISIBLE);
+                        picNotChanged = false;
 
                     }
                     else
@@ -202,19 +205,23 @@ public class SetupActivity extends AppCompatActivity {
 
     private void SaveAccountSetupInformation()
     {
+
         String username = userName.getText().toString();
         String fullname = fullName.getText().toString();
         String country = countryName.getText().toString();
 
-        if(TextUtils.isEmpty(username))
+        if(picNotChanged) {
+            Toast.makeText(this, "Your Haven't Selected A Profile Image Yet...", Toast.LENGTH_SHORT).show();
+        }
+        else if(TextUtils.isEmpty(username))
         {
             Toast.makeText(this, "Please write your username...", Toast.LENGTH_SHORT).show();
         }
-        if(TextUtils.isEmpty(fullname))
+        else if(TextUtils.isEmpty(fullname))
         {
             Toast.makeText(this, "Please write your full name...", Toast.LENGTH_SHORT).show();
         }
-        if(TextUtils.isEmpty(country))
+        else if(TextUtils.isEmpty(country))
         {
             Toast.makeText(this, "Please write your country...", Toast.LENGTH_SHORT).show();
         }
@@ -256,6 +263,9 @@ public class SetupActivity extends AppCompatActivity {
 
 
 
+
+
+
     private void SendUserToMainActivity()
     {
         Intent mainIntent = new Intent(SetupActivity.this, MainActivity.class);
@@ -263,5 +273,14 @@ public class SetupActivity extends AppCompatActivity {
         startActivity(mainIntent);
         finish();
     }
+
+    private void SendUserToSetupActivity()
+    {
+        Intent setupIntent = new Intent(SetupActivity.this, SetupActivity.class);
+        setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(setupIntent);
+        finish();
+    }
+
 
 }
