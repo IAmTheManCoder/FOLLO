@@ -9,6 +9,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
         android:src="@drawable/profile"/>
 
     <LinearLayout
@@ -45,6 +46,7 @@
                 android:id="@+id/comment_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:text="Comment text will display here..."
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
@@ -72,9 +74,9 @@
                 android:id="@+id/comment_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="viewEnd"
-                android:layout_marginLeft="175dp"
+                android:layout_marginLeft="150dp"
                 android:text="Time:"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="14sp"
                 android:textStyle="bold" />
             
