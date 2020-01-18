@@ -36,8 +36,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
+// Class CommentsActivity creates and opens up the Comments Activity.
 public class CommentsActivity extends AppCompatActivity {
 
+    // initiate some variable names
     private ImageButton postCommentButton;
     private EditText commentInputText;
     private RecyclerView commentList;
@@ -47,19 +49,22 @@ public class CommentsActivity extends AppCompatActivity {
 
     private String post_Key, current_user_id, commentImageRef;
 
+    // This is where class CommentsActivity starts
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
 
+        // get the random key of each post
         post_Key = getIntent().getExtras().get("postKey").toString();
 
+        // Firebase references
         mAuth = FirebaseAuth.getInstance();
         current_user_id = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         postsRef = FirebaseDatabase.getInstance().getReference().child("Posts").child(post_Key).child("Commments");
-        //commentImageRef = usersRef.child("profileimage").toString();
 
+        // create some rules for the layout of the comments on the recyclerView
         commentList = (RecyclerView) findViewById(R.id.comments_list);
         commentList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -67,10 +72,12 @@ public class CommentsActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         commentList.setLayoutManager(linearLayoutManager);
 
-
+        // assisn the items on the screen memory references
         commentInputText = (EditText) findViewById(R.id.comment_input);
         postCommentButton = (ImageButton) findViewById(R.id.post_comment_button);
 
+        // when the user presses the post comment button validate the input and get the username
+        // from Firebase and pass it to the ValidateComment method
         postCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,8 +88,10 @@ public class CommentsActivity extends AppCompatActivity {
                             String userName = dataSnapshot.child("username").getValue().toString();
 
                             ValidateComment(userName);
-
+                            // this wipes the EditText clean for a fresh start
                             commentInputText.setText("");
+                            // Call onStart again so the list repopulates.  I wasn't seeing the
+                            // top post until I called this again.
                             onStart();
                         }
                     }
@@ -95,33 +104,45 @@ public class CommentsActivity extends AppCompatActivity {
             }
         });
 
-            usersRef.child(current_user_id).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-                        commentImageRef = dataSnapshot.child("profileimage").getValue().toString();
+       // This is the "Users" DataSnapshot that gets the URL to the profile image
+       // so the profile image of the user can be displayed on each post
+        usersRef.child(current_user_id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
 
-                    }
-                    else{
-                        Toast.makeText(CommentsActivity.this, "Comment Image Failed To Load", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // get the reference to the profileimage and store it in commenImageRef
+                    // It's used in the ValidateComment() method.
+                    commentImageRef = dataSnapshot.child("profileimage").getValue().toString();
 
                 }
-            });
+                else{
+                    Toast.makeText(CommentsActivity.this, "Comment Image Failed To Load", Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
+    // ##################### This is where the supporting methods start ########################################
+    // The FirebaseRecyclerAdapter is placed in the onStart() method.  That way the comments list
+    // will populate as soon as CommentsActivity starts.  It will automaticlly post all of the comments.
     protected void onStart(){
         super.onStart();
 
+        // Create a query that orders the list by the timestamp that's placed as a child when posts
+        // are created.
         Query query = postsRef.orderByChild("commenttimestamp");
 
+        // Create the RecyclerAdapter options that sets the rules on how to populate the list.
+        // This uses the query and Class Comments that have the getters and setters.
         FirebaseRecyclerOptions<Comments> options = new FirebaseRecyclerOptions.Builder<Comments>().setQuery(query, Comments.class).build();
 
+        // Creates the RecyclerAdapter.
         FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<Comments, CommentsViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull CommentsViewHolder commentsViewHolder, int position, @NonNull Comments comments) {
@@ -136,8 +157,10 @@ public class CommentsActivity extends AppCompatActivity {
             @NonNull
             @Override
             public CommentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                // This specifies which layout to post all of items to
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.all_comments_layout, parent, false);
+                        .inflate(R.layout.comments_layout, parent, false);
                 return new CommentsViewHolder(view);
             }
         };
@@ -145,9 +168,8 @@ public class CommentsActivity extends AppCompatActivity {
         commentList.setAdapter(adapter);
     }
 
-
-
-
+    // The ViewHolder method creates a reference to the item on the screen and then sets
+    // the information stored in Firebase and sets it to the all_comments_layout to its specified location.
     public static class CommentsViewHolder extends RecyclerView.ViewHolder{
         View mView;
 
@@ -176,15 +198,17 @@ public class CommentsActivity extends AppCompatActivity {
             myTime.setText(time);
         }
 
+        // display the user profile image to the comment
         public void setCommentImage(Context applicationContext, String commentImage) {
             ImageView myCommentImage = (CircleImageView) mView.findViewById(R.id.comments_users_profile_image);
             Picasso.get().load(commentImage).placeholder(R.drawable.profile).into(myCommentImage);
         }
 
-
-
     }
 
+    // When the user selects the post comment button, this method validates the information.
+    // It gets the text imput, then check to see if its empty or not.  If it's not empty create
+    // custom key to post with info
     private void ValidateComment(String userName) {
 
         String commentText = commentInputText.getText().toString();
@@ -194,14 +218,17 @@ public class CommentsActivity extends AppCompatActivity {
         }
         else{
 
+            // get the date
             Calendar calForDate = Calendar.getInstance();
             SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
             final String saveCurrentDate = currentDate.format(calForDate.getTime());
 
+            // get the time
             Calendar calForTime = Calendar.getInstance();
             SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm:ss");
             final String saveCurrentTime = currentTime.format(calForDate.getTime());
 
+            // create key by combining the userID + date + time and call it randomKey
             final String randomKey = current_user_id + saveCurrentDate + saveCurrentTime;
 
             HashMap commentsMap = new HashMap();
@@ -226,8 +253,7 @@ public class CommentsActivity extends AppCompatActivity {
         }
     }
 
-    //############## This is where the supporting methods start ######################################################
-
+    // Create the timestamp that the RecyclerAdapter uses to diplay the comments from newest to oldest
     private long getCurrentTimeStamp() {
         Long timestamp = System.currentTimeMillis()/1000;
         return timestamp;

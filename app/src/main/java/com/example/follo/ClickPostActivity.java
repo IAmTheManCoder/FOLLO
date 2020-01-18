@@ -48,7 +48,7 @@ public class ClickPostActivity extends AppCompatActivity {
     private String postKey, currentUserId, databaseUserId, description, image, storageKey;
 
 
-    // This is where the app starts
+    // This is where the Activity starts
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,8 +200,6 @@ public class ClickPostActivity extends AppCompatActivity {
         SendUserToMainActivity();
         Toast.makeText(this, "Post Has Been Deleted", Toast.LENGTH_SHORT).show();
     }
-
-
 
     // Send user to Main Activity
     private void SendUserToMainActivity() {

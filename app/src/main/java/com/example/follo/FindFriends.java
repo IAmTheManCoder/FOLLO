@@ -1,5 +1,6 @@
 package com.example.follo;
 
+// This class has all of the getters and setters for the FindFriendActivity RecyclerAdapter
 public class FindFriends {
 
     public String profileimage, fullname, status;
@@ -11,7 +12,6 @@ public class FindFriends {
     }
 
     public FindFriends(){
-
     }
 
     public String getProfileimage() {
