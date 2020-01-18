@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 

@@ -2,9 +2,11 @@
 
 package com.example.follo;
 
+// Class Comments supports the getters and setters fot the RecyclyerView for class CommentsActivity
 public class Comments {
     public String comment, date, time, username, commentImage, uid;
 
+    // Empty constructor
     public Comments(){
 
     }
