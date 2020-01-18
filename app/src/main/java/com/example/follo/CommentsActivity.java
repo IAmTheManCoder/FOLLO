@@ -160,7 +160,7 @@ public class CommentsActivity extends AppCompatActivity {
 
                 // This specifies which layout to post all of items to
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.all_comments_layout, parent, false);
+                        .inflate(R.layout.comments_layout, parent, false);
                 return new CommentsViewHolder(view);
             }
         };

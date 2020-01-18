@@ -71,7 +71,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="200dp"
                 android:text="Time:"
-                android:textAlignment="viewEnd"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
