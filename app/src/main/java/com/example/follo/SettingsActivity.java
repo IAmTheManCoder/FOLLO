@@ -83,6 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
         userRelation = (EditText)  findViewById(R.id.settings_relationship_status);
         userDOB = (EditText)  findViewById(R.id.settings_profile_dob);
         userProfImage = (CircleImageView) findViewById(R.id.settings_profile_image);
+
         updateAccountSettingsButton = (Button) findViewById(R.id.update_account_settings_button);
 
         userRef.addValueEventListener(new ValueEventListener() {

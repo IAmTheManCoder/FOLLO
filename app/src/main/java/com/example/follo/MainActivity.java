@@ -13,11 +13,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -440,6 +442,12 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("Cancel", null);
                 AlertDialog alert = builder.create();
                 alert.show();
+                Button positiveButton = alert.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button negativeButton = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
+                positiveButton.setTextColor(Color.parseColor("#FF0B8B42"));
+                positiveButton.setBackgroundColor(Color.parseColor("#FFE1FCEA"));
+                negativeButton.setTextColor(Color.parseColor("#FFFF0400"));
+                negativeButton.setBackgroundColor(Color.parseColor("#FFFCB9B7"));
                 break;
 
         }
@@ -449,6 +457,7 @@ public class MainActivity extends AppCompatActivity {
     // Sends user to the Settings Screen
     private void SendUserToSettingsActivity() {
         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(settingsIntent);
     }
 

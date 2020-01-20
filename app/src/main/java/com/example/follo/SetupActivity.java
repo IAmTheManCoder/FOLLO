@@ -215,15 +215,15 @@ public class SetupActivity extends AppCompatActivity {
         }
         else if(TextUtils.isEmpty(username))
         {
-            Toast.makeText(this, "Please write your username...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Write Your Username...", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(fullname))
         {
-            Toast.makeText(this, "Please write your full name...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Write Your Full Name...", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(country))
         {
-            Toast.makeText(this, "Please write your country...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Write Your Country...", Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -247,7 +247,7 @@ public class SetupActivity extends AppCompatActivity {
                     if(task.isSuccessful())
                     {
                         SendUserToMainActivity();
-                        Toast.makeText(SetupActivity.this, "your Account is created Successfully.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SetupActivity.this, "Welcome To Follo. :)", Toast.LENGTH_LONG).show();
                         loadingBar.dismiss();
                     }
                     else

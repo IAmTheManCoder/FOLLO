@@ -91,7 +91,7 @@ public class FindFriendActivity extends AppCompatActivity {
 
             // get the info from firebase and set it to the proper holder
             @Override
-            protected void onBindViewHolder(@NonNull FindFriendActivity.FindFriendViewHolder holder, int position, @NonNull FindFriends model) {
+            protected void onBindViewHolder(@NonNull FindFriendActivity.FindFriendViewHolder holder, final int position, @NonNull FindFriends model) {
                 final String postkey = getRef(position).getKey();
                 holder.fullname.setText(model.getFullname());
                 holder.status.setText(model.getStatus());
@@ -102,8 +102,8 @@ public class FindFriendActivity extends AppCompatActivity {
                 holder.itemView.setOnClickListener(new View.OnClickListener(){
                     @Override
                             public void onClick(View v){
-                                Intent findFriends = new Intent(FindFriendActivity.this, FindFriendActivity.class);
-                                findFriends.putExtra("PostKey", postkey);
+                                Intent findFriends = new Intent(FindFriendActivity.this, PersonProfileActivity.class);
+                                findFriends.putExtra("postKey",postkey);
                                 startActivity(findFriends);
                     }
                 });
@@ -127,6 +127,7 @@ public class FindFriendActivity extends AppCompatActivity {
     public static class FindFriendViewHolder extends RecyclerView.ViewHolder{
         TextView fullname, status;
         CircleImageView profileimage;
+
         // assign the variable names to the items on the screen
         public FindFriendViewHolder(@NonNull View itemView){
             super(itemView);

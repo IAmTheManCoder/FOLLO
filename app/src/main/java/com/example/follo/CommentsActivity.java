@@ -95,7 +95,6 @@ public class CommentsActivity extends AppCompatActivity {
                             onStart();
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -114,13 +113,11 @@ public class CommentsActivity extends AppCompatActivity {
                     // get the reference to the profileimage and store it in commenImageRef
                     // It's used in the ValidateComment() method.
                     commentImageRef = dataSnapshot.child("profileimage").getValue().toString();
-
                 }
                 else{
                     Toast.makeText(CommentsActivity.this, "Comment Image Failed To Load", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -207,7 +204,7 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
     // When the user selects the post comment button, this method validates the information.
-    // It gets the text imput, then check to see if its empty or not.  If it's not empty create
+    // It gets the text input, then check to see if its empty or not.  If it's not empty create
     // custom key to post with info
     private void ValidateComment(String userName) {
 
@@ -217,7 +214,6 @@ public class CommentsActivity extends AppCompatActivity {
             Toast.makeText(this, "Please Make A Comment...", Toast.LENGTH_SHORT).show();
         }
         else{
-
             // get the date
             Calendar calForDate = Calendar.getInstance();
             SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
