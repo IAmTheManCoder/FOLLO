@@ -413,11 +413,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_friends:
 
-                Toast.makeText(this,"Friends", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"FriendsActivity", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_find_friends:
                 SendUserToFindFriendsActivity();
-                Toast.makeText(this,"Find Friends", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Find FriendsActivity", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_messages:
                 Toast.makeText(this,"Messages", Toast.LENGTH_SHORT).show();

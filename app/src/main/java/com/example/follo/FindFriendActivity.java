@@ -56,7 +56,7 @@ public class FindFriendActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.find_friends_appbar_layout);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Find Friends");
+        getSupportActionBar().setTitle("Find FriendsActivity");
 
         // intialize and create some rules for the search list
         searchResultList = (RecyclerView) findViewById(R.id.search_result_list);

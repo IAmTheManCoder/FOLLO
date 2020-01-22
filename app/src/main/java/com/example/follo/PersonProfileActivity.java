@@ -48,7 +48,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         receiverUserId = getIntent().getExtras().get("postKey").toString();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         friendRequestRef = FirebaseDatabase.getInstance().getReference().child("FriendRequests");
-        friendsRef = FirebaseDatabase.getInstance().getReference().child("Friends");
+        friendsRef = FirebaseDatabase.getInstance().getReference().child("FriendsActivity");
 
         InitializeFields();
 
