@@ -97,8 +97,7 @@ public class FindFriendActivity extends AppCompatActivity {
                 holder.status.setText(model.getStatus());
                 Picasso.get().load(model.getProfileimage()).into(holder.profileimage);
 
-                // Selecting the user will initiate a new Activity
-                // TODO
+
                 holder.itemView.setOnClickListener(new View.OnClickListener(){
                     @Override
                             public void onClick(View v){

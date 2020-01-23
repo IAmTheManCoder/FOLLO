@@ -17,7 +17,7 @@
         android:textStyle="bold"
         android:textAlignment="center"
         android:textColor="@android:color/background_light"
-        android:text="Friends"/>
+        android:text="Buddies"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friend_list"
