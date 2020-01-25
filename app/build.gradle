@@ -42,6 +42,8 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
     implementation 'com.zolad:zoominimageview:1.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+
 
 
 }

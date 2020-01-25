@@ -7,7 +7,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationHelper {
 
-    public static void DisplayNotification(Context context, String title, String body){
+    public static void displayNotification(Context context, String title, String body){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context, NotificationActivity.CHANNEL_ID)
                         .setSmallIcon(R.drawable.messages)

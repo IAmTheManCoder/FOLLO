@@ -37,6 +37,13 @@ public class NotificationActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
         }
 
+        findViewById(R.id.notification_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayNotification();
+            }
+        });
+
 
 
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -52,11 +59,9 @@ public class NotificationActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
     }
 
-    private void DisplayNotification(){
+    private void displayNotification(){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.messages)

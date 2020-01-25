@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Comment;
@@ -67,11 +68,15 @@ public class MainActivity extends AppCompatActivity {
 
         // assign Firebase references to variable names
 
+
+
         mAuth = FirebaseAuth.getInstance(); // get instance of the Firebase authentication called mAuth
         currentUserId = mAuth.getCurrentUser().getUid();
         userRef = FirebaseDatabase.getInstance().getReference().child("Users"); // create Users category in database
         postsfef = FirebaseDatabase.getInstance().getReference().child("Posts"); // Create Posts category in database
         likesRef = FirebaseDatabase.getInstance().getReference().child("Likes");
+
+        FirebaseMessaging.getInstance().subscribeToTopic("updates");
 
         // Display the toolbar
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);

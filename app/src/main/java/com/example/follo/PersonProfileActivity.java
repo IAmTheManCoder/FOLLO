@@ -106,6 +106,7 @@ public class PersonProfileActivity extends AppCompatActivity {
 
                     if(CURRENT_STATE.equals("not_friends")){
                         SendFriendRequestToAPerson();
+                        NotificationHelper.displayNotification(getApplicationContext(), "You Have a Buddy Request", "This is just a test notification");
                     }
                     if(CURRENT_STATE.equals("request_sent")){
                         CancelFriendRequest();

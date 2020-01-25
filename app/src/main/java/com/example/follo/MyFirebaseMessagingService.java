@@ -14,7 +14,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String body = remoteMessage.getNotification().getBody();
 
 
-            NotificationHelper.DisplayNotification(getApplicationContext(), title, body);
+            NotificationHelper.displayNotification(getApplicationContext(), title, body);
         }
     }
 }

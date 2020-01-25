@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -50,6 +52,7 @@ public class SetupActivity extends AppCompatActivity {
     private DatabaseReference usersRef;
     private StorageReference userProfileImageRef;
     private TextView clickHere;
+    private String TAG;
 
     String currentUserID, token;
     final static int Gallery_Pick = 1;
@@ -61,22 +64,21 @@ public class SetupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
 
-
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
         userProfileImageRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
+        FirebaseMessaging.getInstance().subscribeToTopic("updates");
 
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if(task.isSuccessful()){
+                        if(!task.isSuccessful()){
                             token = task.getResult().getToken();
-
                         }
-                        else {
+                        else{
 
                         }
                     }
