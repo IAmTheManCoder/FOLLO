@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
+// This was my first Zoom attempt.  I am no longer using this class
+// FullScreenZoom is the one that is in use now
+
 public class FullScreenActivity extends AppCompatActivity {
 
     private Uri imageUri;

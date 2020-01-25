@@ -1,5 +1,7 @@
 package com.example.follo;
 
+// This is the static class that supports class FriendsActivity.  It supports displaying the date that two people became friends
+
 public class Friends {
 
     public String date;
