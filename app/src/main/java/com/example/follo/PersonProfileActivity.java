@@ -3,9 +3,13 @@ package com.example.follo;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.icu.util.Currency;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,10 +41,12 @@ public class PersonProfileActivity extends AppCompatActivity {
 
     private String senderUserId, receiverUserId, CURRENT_STATE, saveCurrentDate;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_profile);
+
 
         mAuth = FirebaseAuth.getInstance();
         senderUserId = mAuth.getCurrentUser().getUid();
@@ -324,6 +330,8 @@ public class PersonProfileActivity extends AppCompatActivity {
 
                                                 declineFriendRequestButton.setVisibility(View.INVISIBLE);
                                                 declineFriendRequestButton.setEnabled(false);
+
+
                                             }
                                         }
                                     });
@@ -348,4 +356,6 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         CURRENT_STATE = "not_friends";
     }
+
+
 }

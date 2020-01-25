@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -45,11 +47,11 @@ public class SetupActivity extends AppCompatActivity {
     private CircleImageView ProfileImage;
     private ProgressDialog loadingBar;
     private FirebaseAuth mAuth;
-    private DatabaseReference UsersRef;
-    private StorageReference UserProfileImageRef;
+    private DatabaseReference usersRef;
+    private StorageReference userProfileImageRef;
     private TextView clickHere;
 
-    String currentUserID;
+    String currentUserID, token;
     final static int Gallery_Pick = 1;
     boolean picNotChanged = true;
 
@@ -62,9 +64,23 @@ public class SetupActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
-        UserProfileImageRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
+        usersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
+        userProfileImageRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if(task.isSuccessful()){
+                            token = task.getResult().getToken();
+
+                        }
+                        else {
+
+                        }
+                    }
+                });
 
         userName = (EditText) findViewById(R.id.setup_username);
         fullName = (EditText) findViewById(R.id.setup_full_name);
@@ -98,7 +114,7 @@ public class SetupActivity extends AppCompatActivity {
         });
 
 
-        UsersRef.addValueEventListener(new ValueEventListener() {
+        usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
@@ -159,7 +175,7 @@ public class SetupActivity extends AppCompatActivity {
                 Uri resultUri = result.getUri();
                 // Get a reference to the storage in Firebase.  Its a filepath to the Firebase Storage
                 // Create a child and store to the user with a file type .jpg
-                final StorageReference filePath = UserProfileImageRef.child(currentUserID + ".jpg");
+                final StorageReference filePath = userProfileImageRef.child(currentUserID + ".jpg");
                 // Store the cropped image "resultUri" into the profile image's folder
                 filePath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -168,7 +184,7 @@ public class SetupActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 final String downloadUrl = uri.toString();
-                                UsersRef.child("profileimage").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                usersRef.child("profileimage").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
@@ -240,7 +256,8 @@ public class SetupActivity extends AppCompatActivity {
             userMap.put("gender", "");
             userMap.put("dob", "");
             userMap.put("relationshipstatus", "");
-            UsersRef.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+            userMap.put("token", token);
+            usersRef.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task)
                 {

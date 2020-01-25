@@ -1,12 +1,14 @@
 package com.example.follo;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -58,8 +60,7 @@ public class FriendsActivity extends AppCompatActivity {
 
     private void DisplayAllFriends() {
 
-
-        Query query = friendsRef.orderByChild("fullname");
+        Query query = friendsRef.orderByChild("date"); // haven't implemented a proper list sort yet.
 
         FirebaseRecyclerOptions<Friends> options = new FirebaseRecyclerOptions.Builder<Friends>().setQuery(query, Friends.class).build();
 
@@ -79,6 +80,34 @@ public class FriendsActivity extends AppCompatActivity {
 
                             friendsViewHolder.setFullName(username);
                             friendsViewHolder.setProfileImage(getApplicationContext(), profileimage);
+                            friendsViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    CharSequence options[] = new CharSequence[]{
+                                            username + "'s Profile",
+                                            "Send Message"
+                                    };
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(FriendsActivity.this);
+                                    builder.setTitle("Select Options");
+
+                                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (which == 0){
+                                                Intent profileIntent = new Intent(FriendsActivity.this, PersonProfileActivity.class);
+                                                profileIntent.putExtra("postKey", usersIDs);
+                                                startActivity(profileIntent);
+                                            }
+                                            if (which == 1){
+                                                Intent chatIntent = new Intent(FriendsActivity.this, ChatActivity.class);
+                                                chatIntent.putExtra("postKey", usersIDs);
+                                                startActivity(chatIntent);
+                                            }
+                                        }
+                                    });
+                                    builder.show();
+                                }
+                            });
                         }
                     }
 
