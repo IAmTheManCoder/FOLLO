@@ -37,6 +37,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
 
+// Handles the login Activity.
 public class LoginActivity extends AppCompatActivity {
 
     // initialize variables
@@ -45,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText userEmail, userPassword;
     private TextView needNewAccountLink, forgotPasswordLink;
     private ProgressDialog loadingBar;
-
+    // firebase Authorization
     private FirebaseAuth mAuth;
 
     private static final int RC_SIGN_IN = 1;

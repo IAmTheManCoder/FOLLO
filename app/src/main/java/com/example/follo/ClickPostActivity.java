@@ -61,8 +61,6 @@ public class ClickPostActivity extends AppCompatActivity {
         clickPostRef = FirebaseDatabase.getInstance().getReference().child("Posts").child(postKey);
         mFirebaseStorage = FirebaseStorage.getInstance().getReference().getStorage();
 
-
-
         // assign the layout fields to their variable names
         postImage = (ImageView) findViewById(R.id.click_post_image);
         postDescription = (TextView) findViewById(R.id.click_post_description);

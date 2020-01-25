@@ -42,12 +42,13 @@ public class FriendsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
 
+        // Firebase references
         mAuth = FirebaseAuth.getInstance();
         online_user_id = mAuth.getCurrentUser().getUid();
         friendsRef = FirebaseDatabase.getInstance().getReference().child("Friends").child(online_user_id);
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
-
+        // set some layout rules for the recyclerView that displays the list of friends
         myFriendList = (RecyclerView) findViewById(R.id.friend_list);
         myFriendList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -55,41 +56,54 @@ public class FriendsActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         myFriendList.setLayoutManager(linearLayoutManager);
 
+        // call the method that displays all friends
         DisplayAllFriends();
     }
 
+    // This method creates the recyclerView rules and is responsible for querying the Firebase
+    // database and displaying all the info
     private void DisplayAllFriends() {
 
+        // query that decides how the friends are sorted
         Query query = friendsRef.orderByChild("date"); // haven't implemented a proper list sort yet.
 
+        // build the options for the adapter
         FirebaseRecyclerOptions<Friends> options = new FirebaseRecyclerOptions.Builder<Friends>().setQuery(query, Friends.class).build();
 
+        // start the adapter here
         FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<Friends, FriendsViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final FriendsViewHolder friendsViewHolder, int position, @NonNull Friends friends) {
 
+                // get the date to display how long 2 people have been friends
                 friendsViewHolder.setDate(friends.getDate());
-                final String usersIDs = getRef(position).getKey();
-
+                final String usersIDs = getRef(position).getKey(); // get the key for each position
+                // reference to "Users" on Firebase use the refe for each key
                 usersRef.child(usersIDs).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
+                            // get the user's name and image to display on the Friends List along with date
                             final String username = dataSnapshot.child("fullname").getValue().toString();
                             final String profileimage = dataSnapshot.child("profileimage").getValue().toString();
 
-                            friendsViewHolder.setFullName(username);
-                            friendsViewHolder.setProfileImage(getApplicationContext(), profileimage);
+                            friendsViewHolder.setFullName(username);// set the name
+                            friendsViewHolder.setProfileImage(getApplicationContext(), profileimage); // set the image
+
+                            // make each friend on the list clickable.
                             friendsViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    // create the two options for the dialog window below and call
+                                    // it options
                                     CharSequence options[] = new CharSequence[]{
                                             username + "'s Profile",
                                             "Send Message"
                                     };
+                                    // create the AlertDialog
                                     AlertDialog.Builder builder = new AlertDialog.Builder(FriendsActivity.this);
                                     builder.setTitle("Select Options");
-
+                                    // if user selects the friends username then start the Person profile intent
                                     builder.setItems(options, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -97,7 +111,7 @@ public class FriendsActivity extends AppCompatActivity {
                                                 Intent profileIntent = new Intent(FriendsActivity.this, PersonProfileActivity.class);
                                                 profileIntent.putExtra("postKey", usersIDs);
                                                 startActivity(profileIntent);
-                                            }
+                                            }// if user selects Send Message then start the message intent
                                             if (which == 1){
                                                 Intent chatIntent = new Intent(FriendsActivity.this, ChatActivity.class);
                                                 chatIntent.putExtra("postKey", usersIDs);
@@ -115,7 +129,7 @@ public class FriendsActivity extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
-                });
+                }); // click listener for each friend on the list
                 friendsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -160,10 +174,6 @@ public class FriendsActivity extends AppCompatActivity {
                 TextView friendsDate = (TextView) mView.findViewById(R.id.all_users_status);
                 friendsDate.setText("Friends scince: " + date);
             }
-
-
-
         }
-
     }
 

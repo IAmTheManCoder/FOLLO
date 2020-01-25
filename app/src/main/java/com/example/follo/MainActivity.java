@@ -40,6 +40,12 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Comment;
 
+
+//This is the MainActivity which is where the app starts up to if the user did not sign out.
+// If the user created an account, but did not finish setting up the profile, they will redirected
+// back to the set upscreen.  If the user is authenticated, logged in, and finished setting up the
+// setup screen the app will start up and direct them to this activity.  It houses all of the posts.
+
 public class MainActivity extends AppCompatActivity {
 
     // Initiate some variables
@@ -160,22 +166,26 @@ public class MainActivity extends AppCompatActivity {
 
     // Display the users posts.
     private void DisplayAllUsersPosts(){
-
+        // The posts are sorted by timestamp.  A timestamp is created when the user makes a post
+        // and it's stored to Firebase.  When the posts list is populated when this activity starts
+        // it grabs the time stamp and sorts the list from newest to oldest so the last post is on top
         Query sortPostsInDecendingOrder = postsfef.orderByChild("timestamp");
 
         FirebaseRecyclerOptions<Posts> options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(sortPostsInDecendingOrder, Posts.class).build();
         FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<Posts,PostsViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull PostsViewHolder postsViewHolder, int position, @NonNull Posts posts) {
-                final String postKey = getRef(position).getKey();
-                postsViewHolder.setFullname(posts.getFullname());
-                postsViewHolder.setDescription(posts.getDescription());
-                postsViewHolder.setProfileImage(getApplicationContext(),posts.getProfileimage());
-                postsViewHolder.setPostImage(getApplicationContext(),posts.getPostimage());
-                postsViewHolder.setDate(posts.getDate());
-                postsViewHolder.setTime(posts.getTime());
+                final String postKey = getRef(position).getKey();// get the key to each post
+                postsViewHolder.setFullname(posts.getFullname());// set the posters name on the post
+                postsViewHolder.setDescription(posts.getDescription());// set the posters description of the post
+                postsViewHolder.setProfileImage(getApplicationContext(),posts.getProfileimage());// set profile image
+                postsViewHolder.setPostImage(getApplicationContext(),posts.getPostimage());// set post image
+                postsViewHolder.setDate(posts.getDate()); // set date on post
+                postsViewHolder.setTime(posts.getTime());// set time on post
 
-                postsViewHolder.setLikeButtonStatus(postKey);
+                postsViewHolder.setLikeButtonStatus(postKey); // set like button status
+                // when user clicks the post is starts the ClickPostActivity where the creator can
+                // edit or delete the post.  On the Click post activity you can click on the
                 postsViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
