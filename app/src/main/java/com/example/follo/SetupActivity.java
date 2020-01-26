@@ -75,11 +75,11 @@ public class SetupActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if(!task.isSuccessful()){
+                        if(task.isSuccessful()){
                             token = task.getResult().getToken();
                         }
                         else{
-
+                            Toast.makeText(SetupActivity.this,"No Token was generated during account creation.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
