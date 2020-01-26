@@ -113,8 +113,11 @@ public class FriendsActivity extends AppCompatActivity {
                                                 startActivity(profileIntent);
                                             }// if user selects Send Message then start the message intent
                                             if (which == 1){
+                                                // send this info to the ChatActivity.  It's the
+                                                // message receiver's id and name
                                                 Intent chatIntent = new Intent(FriendsActivity.this, ChatActivity.class);
                                                 chatIntent.putExtra("postKey", usersIDs);
+                                                chatIntent.putExtra("userName", username);
                                                 startActivity(chatIntent);
                                             }
                                         }

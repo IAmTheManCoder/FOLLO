@@ -435,8 +435,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Find Some New Buds", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_messages:
-                SendUserToNotificationsActivity();
-                //SendUserToFriendsActivity();
+                SendUserToFriendsActivity();
+
                 Toast.makeText(this,"Messages", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_settings:
@@ -468,6 +468,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
         }
+    }
+
+    private void SendUserToChatActivity(){
+        Intent chatIntent = new Intent(MainActivity.this, ChatActivity.class);
+        startActivity(chatIntent);
     }
 
     private void SendUserToNotificationsActivity() {
